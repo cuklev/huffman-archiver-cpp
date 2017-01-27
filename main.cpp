@@ -17,8 +17,8 @@ int main(int argc, char** argv) {
 		return 1;
 	}
 
-	std::istream* in = argc > 2 ? new std::ifstream(argv[2]) : &std::cin;
-	std::ostream* out = argc > 3 ? new std::ofstream(argv[3]) : &std::cout;
+	std::istream* const in = argc > 2 ? new std::ifstream(argv[2]) : &std::cin;
+	std::ostream* const out = argc > 3 ? new std::ofstream(argv[3]) : &std::cout;
 
 	if(argv[1] == COMPRESS_COMMAND) {
 		std::string data;

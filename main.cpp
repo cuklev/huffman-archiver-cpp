@@ -10,6 +10,8 @@ void printUsage() {
 
 const std::string COMPRESS_COMMAND = "c";
 const std::string DECOMPRESS_COMMAND = "d";
+const std::string ARCHIVE_COMMAND = "a";
+const std::string EXTRACT_COMMAND = "x";
 
 int main(int argc, char** argv) {
 	if(argc < 2) {
@@ -29,6 +31,14 @@ int main(int argc, char** argv) {
 		std::string data;
 		data.assign(std::istreambuf_iterator<char>(*in), std::istreambuf_iterator<char>());
 		*out << decompress(data);
+	}
+	else if(argv[1] == ARCHIVE_COMMAND) {
+		std::cerr << "Archive is not implemented\n";
+		return 1;
+	}
+	else if(argv[1] == EXTRACT_COMMAND) {
+		std::cerr << "Extract is not implemented\n";
+		return 1;
 	}
 	else {
 		printUsage();

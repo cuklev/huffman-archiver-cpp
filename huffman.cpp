@@ -63,3 +63,9 @@ std::array<std::vector<bool>, BYTES_COUNT> buildCompressTable(HuffmanNode* root)
 
 	return table;
 }
+
+std::experimental::optional<char> goDownHuffman(HuffmanNode*& node, int direction) {
+	node = node->child[direction];
+	if(node->child[0]) return {};
+	return {node->symbol};
+}

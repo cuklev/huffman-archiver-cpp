@@ -1,4 +1,5 @@
 #include "compress.hpp"
+#include "decompress.hpp"
 
 #include<iostream>
 #include<fstream>
@@ -25,8 +26,9 @@ int main(int argc, char** argv) {
 		out << compress(data);
 	}
 	else if(argv[1] == DECOMPRESS_COMMAND) {
-		std::cerr << "Not implemented\n";
-		return 1;
+		std::string data;
+		data.assign(std::istreambuf_iterator<char>(in), std::istreambuf_iterator<char>());
+		out << decompress(data);
 	}
 	else {
 		printUsage();

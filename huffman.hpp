@@ -1,5 +1,4 @@
-#ifndef __HUFFMAN_HPP
-#define __HUFFMAN_HPP
+#pragma once
 
 #include<cstdint>
 #include<array>
@@ -12,5 +11,3 @@ struct HuffmanNode;
 HuffmanNode* buildHuffmanTree(const std::array<uint64_t, BYTES_COUNT>&);
 
 std::array<std::vector<bool>, BYTES_COUNT> buildCompressTable(HuffmanNode*);
-
-#endif

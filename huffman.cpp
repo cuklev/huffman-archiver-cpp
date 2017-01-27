@@ -11,35 +11,44 @@ struct HuffmanNode {
 		child[1] = nullptr;
 	}
 
-	HuffmanNode(char s)
+	HuffmanNode(unsigned char s)
 		: symbol(s) {
 		child[0] = nullptr;
 		child[1] = nullptr;
 	}
 };
 
+struct NodePriority {
+	uint64_t priority;
+	HuffmanNode* node;
+
+	inline bool operator<(const NodePriority& other) const {
+		return priority > other.priority;
+	}
+};
+
 HuffmanNode* buildHuffmanTree(const std::array<uint64_t, BYTES_COUNT>& freq_table) {
-	std::priority_queue<std::pair<uint64_t, HuffmanNode*>> q;
+	std::priority_queue<NodePriority> q;
 
 	for(int i = 0; i < (int)freq_table.size(); ++i) {
 		if(freq_table[i] == 0) continue;
-		q.push({-freq_table[i], new HuffmanNode(i)});
+		q.push({freq_table[i], new HuffmanNode(i)});
 	}
 
 	while(q.size() > 1) {
 		auto node = new HuffmanNode;
 
-		auto freq = q.top().first;
-		node->child[0] = q.top().second; q.pop();
+		auto freq = q.top().priority;
+		node->child[0] = q.top().node; q.pop();
 
-		freq += q.top().first;
-		node->child[1] = q.top().second; q.pop();
+		freq += q.top().priority;
+		node->child[1] = q.top().node; q.pop();
 
 		q.push({freq, node});
 	}
 
 	// TODO: fix for empty array
-	return q.top().second;
+	return q.top().node;
 }
 
 void dfs(const HuffmanNode* node, std::vector<bool>& bit_sequence, std::array<std::vector<bool>, BYTES_COUNT>& table) {

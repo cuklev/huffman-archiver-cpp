@@ -10,7 +10,7 @@ std::string compress(const std::string& data) {
 	auto root = buildHuffmanTree(freq_table);
 	auto table = buildCompressTable(root);
 
-	std::string compressed;
+	std::string compressed((char*)freq_table.data(), sizeof(freq_table));
 
 	uint64_t index = 0;
 	for(uch c : data) {

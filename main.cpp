@@ -23,13 +23,13 @@ int main(int argc, char** argv) {
 	std::ostream* const out = argc > 3 ? new std::ofstream(argv[3]) : &std::cout;
 
 	if(argv[1] == COMPRESS_COMMAND) {
-		std::string data;
-		data.assign(std::istreambuf_iterator<char>(*in), std::istreambuf_iterator<char>());
+		std::string data((std::istreambuf_iterator<char>(*in)),
+				std::istreambuf_iterator<char>());
 		*out << compress(data);
 	}
 	else if(argv[1] == DECOMPRESS_COMMAND) {
-		std::string data;
-		data.assign(std::istreambuf_iterator<char>(*in), std::istreambuf_iterator<char>());
+		std::string data((std::istreambuf_iterator<char>(*in)),
+				std::istreambuf_iterator<char>());
 		*out << decompress(data);
 	}
 	else if(argv[1] == ARCHIVE_COMMAND) {

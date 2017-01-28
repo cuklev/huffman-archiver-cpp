@@ -1,6 +1,5 @@
 #include "decompress.hpp"
 #include "huffman.hpp"
-#include<iterator>
 
 void decompress(std::istreambuf_iterator<char>& in_iterator,
 		std::ostreambuf_iterator<char>& out_iterator) {

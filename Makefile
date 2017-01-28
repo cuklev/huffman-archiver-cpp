@@ -17,7 +17,7 @@ clean:
 ${TARGET}: ${O_FILES}
 	${CXX} ${LDFLAGS} $^ -o $@
 
-${BUILD_DIR}/%.cpp.o: %.cpp ${BUILD_DIR}
+${BUILD_DIR}/%.cpp.o: %.cpp | ${BUILD_DIR}
 	${CXX} ${CXXFLAGS} $< -o $@
 
 ${BUILD_DIR}:

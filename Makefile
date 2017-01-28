@@ -7,7 +7,7 @@ TARGET=${BUILD_DIR}/huff
 
 SRC_FILES=$(shell find -name \*.cpp)
 O_FILES=${SRC_FILES:%.cpp=${BUILD_DIR}/%.cpp.o}
-D_FILES=${O_FILES:%.o=%d}
+D_FILES=${O_FILES:%.o=%.d}
 
 all: ${TARGET}
 

@@ -2,42 +2,38 @@
 #include "huffman.hpp"
 #include<iterator>
 
-std::string decompress(std::istreambuf_iterator<char>& data_iterator) {
-	std::string decompressed;
+void decompress(std::istreambuf_iterator<char>& in_iterator,
+		std::ostreambuf_iterator<char>& out_iterator) {
 
 	std::array<uint64_t, BYTES_COUNT> freq_table;
 
 	{
 		auto dest = (char*)freq_table.data();
 		for(int left = sizeof(freq_table); left > 0; --left) {
-			*dest = *data_iterator;
-			++data_iterator;
+			*dest = *in_iterator;
+			++in_iterator;
 			++dest;
 		}
 	}
 
-	uint64_t decompressed_length = 0;
+	uint64_t bytes_left = 0;
 	for(auto x : freq_table)
-		decompressed_length += x;
-
-	decompressed.reserve(decompressed_length);
+		bytes_left += x;
 
 	auto root = buildHuffmanTree(freq_table);
 	auto node = root;
 
-	while(!data_iterator.equal(std::istreambuf_iterator<char>())) {
-		unsigned char c = *data_iterator;
-		++data_iterator;
+	while(!in_iterator.equal(std::istreambuf_iterator<char>())) {
+		unsigned char c = *in_iterator;
+		++in_iterator;
 
 		for(int i = 7; i >= 0; --i) {
 			auto result = goDownHuffman(node, (c >> i) & 1);
 			if(result) {
-				decompressed.push_back(result.value());
-				if(decompressed.size() == decompressed_length) break;
+				*out_iterator = result.value();
+				if(bytes_left == 0) break;
 				node = root;
 			}
 		}
 	}
-
-	return decompressed;
 }

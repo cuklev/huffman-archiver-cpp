@@ -28,8 +28,9 @@ int main(int argc, char** argv) {
 		*out << compress(data);
 	}
 	else if(argv[1] == DECOMPRESS_COMMAND) {
-		std::istreambuf_iterator<char> data_iterator(*in);
-		*out << decompress(data_iterator);
+		std::istreambuf_iterator<char> in_iterator(*in);
+		std::ostreambuf_iterator<char> out_iterator(*out);
+		decompress(in_iterator, out_iterator);
 	}
 	else if(argv[1] == ARCHIVE_COMMAND) {
 		std::cerr << "Archive is not implemented\n";

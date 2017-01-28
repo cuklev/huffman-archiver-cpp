@@ -2,4 +2,4 @@
 
 #include<string>
 
-std::string decompress(const std::string&);
+std::string decompress(std::istreambuf_iterator<char>&);

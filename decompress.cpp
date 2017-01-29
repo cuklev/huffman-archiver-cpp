@@ -44,6 +44,7 @@ void decompress(std::istreambuf_iterator<char>& in_iterator,
 			auto result = goDownHuffman(node, (c >> i) & 1);
 			if(result) {
 				*out_iterator = result.value();
+				--bytes_left;
 				if(bytes_left == 0) break;
 				node = root;
 			}

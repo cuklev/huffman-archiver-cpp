@@ -3,6 +3,7 @@
 
 #include<iostream>
 #include<fstream>
+#include<sstream>
 
 void printUsage() {
 	std::cout << "Give option\n";
@@ -19,15 +20,36 @@ int main(int argc, char** argv) {
 		return 1;
 	}
 
-	std::istream* const in = argc > 2 ? new std::ifstream(argv[2]) : &std::cin;
-	std::ostream* const out = argc > 3 ? new std::ofstream(argv[3]) : &std::cout;
-
 	if(argv[1] == COMPRESS_COMMAND) {
-		std::string data((std::istreambuf_iterator<char>(*in)),
-				std::istreambuf_iterator<char>());
-		*out << compress(data);
+		std::ostream* const out = argc > 3 ? new std::ofstream(argv[3]) : &std::cout;
+		std::ostreambuf_iterator<char> out_iterator(*out);
+
+		std::array<uint64_t, BYTES_COUNT> freq_table;
+
+		if(argc > 2) {
+			std::ifstream in_file(argv[2]);
+			freq_table = readTable(in_file);
+			in_file.close();
+			in_file.open(argv[2]);
+			compress(freq_table, in_file, out_iterator);
+		} else {
+			const std::string in_data((std::istreambuf_iterator<char>(std::cin)),
+					std::istreambuf_iterator<char>());
+
+			{
+				std::istringstream in_stream(in_data);
+				freq_table = readTable(in_stream);
+			}
+			{
+				std::istringstream in_stream(in_data);
+				compress(freq_table, in_stream, out_iterator);
+			}
+		}
 	}
 	else if(argv[1] == DECOMPRESS_COMMAND) {
+		std::istream* const in = argc > 2 ? new std::ifstream(argv[2]) : &std::cin;
+		std::ostream* const out = argc > 3 ? new std::ofstream(argv[3]) : &std::cout;
+
 		std::istreambuf_iterator<char> in_iterator(*in);
 		std::ostreambuf_iterator<char> out_iterator(*out);
 		decompress(in_iterator, out_iterator);

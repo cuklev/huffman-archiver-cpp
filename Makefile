@@ -5,7 +5,7 @@ LDFLAGS=
 BUILD_DIR=bin
 TARGET=${BUILD_DIR}/huff
 
-SRC_FILES=$(shell find -name \*.cpp)
+SRC_FILES=$(wildcard *.cpp) $(wildcard **/*.cpp)
 O_FILES=${SRC_FILES:%.cpp=${BUILD_DIR}/%.cpp.o}
 D_FILES=${O_FILES:%.o=%.d}
 
@@ -17,11 +17,9 @@ clean:
 ${TARGET}: ${O_FILES}
 	${CXX} ${LDFLAGS} $^ -o $@
 
-${BUILD_DIR}/%.cpp.o: %.cpp | ${BUILD_DIR}
+${BUILD_DIR}/%.cpp.o: %.cpp # | $(@D)
+	@mkdir -p $(@D)
 	${CXX} ${CXXFLAGS} $< -o $@
-
-${BUILD_DIR}:
-	mkdir ${BUILD_DIR}
 
 -include ${D_FILES}
 

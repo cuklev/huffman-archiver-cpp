@@ -1,5 +1,5 @@
-#include "compress.hpp"
-#include "decompress.hpp"
+#include "huffman/compress.hpp"
+#include "huffman/decompress.hpp"
 
 #include<iostream>
 #include<fstream>

@@ -1,7 +1,10 @@
 #include "huffman/compress.hpp"
 #include "huffman/decompress.hpp"
+
 #include "commands/compress.hpp"
 #include "commands/decompress.hpp"
+#include "commands/archive.hpp"
+#include "commands/extract.hpp"
 
 #include<iostream>
 #include<fstream>
@@ -34,12 +37,14 @@ int main(int argc, char** argv) {
 		else decompress(std::cin, std::cout);
 	}
 	else if(argv[1] == ARCHIVE_COMMAND) {
-		std::cerr << "Archive is not implemented\n";
-		return 1;
+		if(argc > 3) archive(argv[2], argv[3]);
+		else if(argc > 2) archive(argv[2], std::cout);
+		else archive(std::cin, std::cout);
 	}
 	else if(argv[1] == EXTRACT_COMMAND) {
-		std::cerr << "Extract is not implemented\n";
-		return 1;
+		if(argc > 3) extract(argv[2], argv[3]);
+		else if(argc > 2) extract(std::cin, argv[2]);
+		else std::cerr << "Where to extract?\n";
 	}
 	else {
 		printUsage(argv[0]);

@@ -15,9 +15,23 @@ void decompress(std::istreambuf_iterator<char>& in_iterator,
 		}
 	}
 
+	int last_not_zero = -1;
 	uint64_t bytes_left = 0;
-	for(auto x : freq_table)
-		bytes_left += x;
+	for(int i = 0; i < (int)freq_table.size(); ++i) {
+		bytes_left += freq_table[i];
+		if(freq_table[i] == 0) continue;
+
+		if(last_not_zero == -1)
+			last_not_zero = i;
+		else if(last_not_zero >= 0)
+			last_not_zero = -2;
+	}
+	
+	if(last_not_zero >= 0) {
+		for(int left = freq_table[last_not_zero]; left > 0; --left)
+			*out_iterator = last_not_zero;
+		return;
+	}
 
 	auto root = buildHuffmanTree(freq_table);
 	auto node = root;

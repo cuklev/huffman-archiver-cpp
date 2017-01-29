@@ -49,5 +49,7 @@ void decompress(std::istreambuf_iterator<char>& in_iterator,
 				node = root;
 			}
 		}
+
+		if(bytes_left == 0) break;
 	}
 }

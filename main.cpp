@@ -7,8 +7,9 @@
 #include<fstream>
 #include<sstream>
 
-void printUsage() {
-	std::cout << "Give option\n";
+void printUsage(const char* prog_name) {
+	std::cout << "Usage:\n  "
+		<< prog_name << " c|d|a|x [in file] [out file]\n";
 }
 
 const std::string COMPRESS_COMMAND = "c";
@@ -18,7 +19,7 @@ const std::string EXTRACT_COMMAND = "x";
 
 int main(int argc, char** argv) {
 	if(argc < 2) {
-		printUsage();
+		printUsage(argv[0]);
 		return 1;
 	}
 
@@ -41,7 +42,7 @@ int main(int argc, char** argv) {
 		return 1;
 	}
 	else {
-		printUsage();
+		printUsage(argv[0]);
 		return 1;
 	}
 }

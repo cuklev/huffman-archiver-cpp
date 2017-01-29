@@ -18,7 +18,6 @@ void compress(const std::array<uint64_t, BYTES_COUNT>& freq_table,
 		std::ostreambuf_iterator<char>& out_iterator) {
 
 	auto root = buildHuffmanTree(freq_table);
-	auto table = buildCompressTable(root);
 
 	{
 		const char* src = (char*)freq_table.data();
@@ -27,6 +26,9 @@ void compress(const std::array<uint64_t, BYTES_COUNT>& freq_table,
 			++src;
 		}
 	}
+
+	if(root == nullptr) return;
+	auto table = buildCompressTable(root);
 
 	uint64_t index = 0;
 	char buffer_char = 0;

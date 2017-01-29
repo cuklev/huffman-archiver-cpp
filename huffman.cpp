@@ -35,6 +35,8 @@ HuffmanNode* buildHuffmanTree(const std::array<uint64_t, BYTES_COUNT>& freq_tabl
 		q.push({freq_table[i], new HuffmanNode(i)});
 	}
 
+	if(q.empty()) return nullptr;
+
 	while(q.size() > 1) {
 		auto node = new HuffmanNode;
 
@@ -47,7 +49,6 @@ HuffmanNode* buildHuffmanTree(const std::array<uint64_t, BYTES_COUNT>& freq_tabl
 		q.push({freq, node});
 	}
 
-	// TODO: fix for empty array
 	return q.top().node;
 }
 

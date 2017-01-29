@@ -1,4 +1,5 @@
 #include "compress.hpp"
+#include "../binary/bin_stream.hpp"
 #include<algorithm>
 
 using uch = unsigned char;
@@ -30,21 +31,9 @@ void compress(const std::array<uint64_t, BYTES_COUNT>& freq_table,
 	if(root == nullptr) return;
 	auto table = buildCompressTable(root);
 
-	uint64_t index = 0;
-	char buffer_char = 0;
-	std::for_each(std::istreambuf_iterator<char>(input),
-			std::istreambuf_iterator<char>(),
-			[&](uch c) {
-				for(unsigned f : table[c]) {
-					buffer_char |= f << (~index & 7);
-					++index;
-					if((index & 7) == 0) {
-						*out_iterator = buffer_char;
-						buffer_char = 0;
-					}
-				}
-			});
+	BinaryWrite bin_out(out_iterator);
+	auto put_bit = [&bin_out](uint8_t f){bin_out(f);};
+	auto put_bits = [&](uch c){ std::for_each(table[c].begin(), table[c].end(), put_bit); };
 
-	if((index & 7) > 0)
-		*out_iterator = buffer_char;
+	std::for_each(std::istreambuf_iterator<char>(input), std::istreambuf_iterator<char>(), put_bits);
 }

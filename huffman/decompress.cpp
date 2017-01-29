@@ -1,5 +1,6 @@
 #include "decompress.hpp"
 #include "huffman.hpp"
+#include "../binary/bin_stream.hpp"
 
 void decompress(std::istreambuf_iterator<char>& in_iterator,
 		std::ostreambuf_iterator<char>& out_iterator) {
@@ -36,20 +37,13 @@ void decompress(std::istreambuf_iterator<char>& in_iterator,
 	auto root = buildHuffmanTree(freq_table);
 	auto node = root;
 
-	while(!in_iterator.equal(std::istreambuf_iterator<char>())) {
-		unsigned char c = *in_iterator;
-		++in_iterator;
-
-		for(int i = 7; i >= 0; --i) {
-			auto result = goDownHuffman(node, (c >> i) & 1);
-			if(result) {
-				*out_iterator = result.value();
-				--bytes_left;
-				if(bytes_left == 0) break;
-				node = root;
-			}
+	BinaryRead bin_in(in_iterator);
+	while(true) {
+		if(auto result = goDownHuffman(node, bin_in())) {
+			*out_iterator = result.value();
+			--bytes_left;
+			if(bytes_left == 0) break;
+			node = root;
 		}
-
-		if(bytes_left == 0) break;
 	}
 }

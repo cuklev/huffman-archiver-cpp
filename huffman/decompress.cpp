@@ -19,35 +19,27 @@ void decompress(std::istreambuf_iterator<char>& in_iterator,
 
 	BinaryRead bin_in(in_iterator);
 
-	auto root = makeNode();
-	dfs(bin_in, root);
-
 	uint64_t bytes_left = 0;
 	for(int i = 63; i >= 0; --i)
 		bytes_left |= (uint8_t)bin_in() << i;
 
-/*
-	int last_not_zero = -1;
-	for(int i = 0; i < (int)freq_table.size(); ++i) {
-		bytes_left += freq_table[i];
-		if(freq_table[i] == 0) continue;
+	if(bytes_left == 0) return;
 
-		if(last_not_zero == -1)
-			last_not_zero = i;
-		else if(last_not_zero >= 0)
-			last_not_zero = -2;
-	}
-	
-	if(last_not_zero >= 0) {
-		for(int left = freq_table[last_not_zero]; left > 0; --left)
-			*out_iterator = last_not_zero;
+	auto root = makeNode();
+	dfs(bin_in, root);
+
+	if(auto result = isLeaf(root)) {
+		while(bytes_left > 0) {
+			*out_iterator = result.value();
+			--bytes_left;
+		}
 		return;
 	}
-*/
 
 	auto node = root;
 	while(true) {
-		if(auto result = goDownHuffman(node, bin_in())) {
+		node = goDown(node, bin_in());
+		if(auto result = isLeaf(node)) {
 			*out_iterator = result.value();
 			--bytes_left;
 			if(bytes_left == 0) break;

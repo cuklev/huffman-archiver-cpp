@@ -10,7 +10,8 @@ struct HuffmanNode;
 
 HuffmanNode* buildHuffmanTree(const std::array<uint64_t, BYTES_COUNT>&);
 
-std::experimental::optional<unsigned char> goDownHuffman(HuffmanNode*&, int);
+std::experimental::optional<unsigned char> isLeaf(HuffmanNode* const);
+HuffmanNode* goDown(HuffmanNode* const, int);
 
 HuffmanNode* makeNode();
 HuffmanNode* makeLeftChild(HuffmanNode* const);

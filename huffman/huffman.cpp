@@ -52,30 +52,22 @@ HuffmanNode* buildHuffmanTree(const std::array<uint64_t, BYTES_COUNT>& freq_tabl
 	return q.top().node;
 }
 
-void dfs(const HuffmanNode* node, std::vector<bool>& bit_sequence, std::array<std::vector<bool>, BYTES_COUNT>& table) {
-	if(!node->child[0]) {
-		table[node->symbol] = bit_sequence;
-		return;
-	}
-
-	bit_sequence.push_back(0);
-	dfs(node->child[0], bit_sequence, table);
-	bit_sequence.back() = 1;
-	dfs(node->child[1], bit_sequence, table);
-	bit_sequence.pop_back();
-}
-
-std::array<std::vector<bool>, BYTES_COUNT> buildCompressTable(HuffmanNode* root) {
-	std::array<std::vector<bool>, BYTES_COUNT> table;
-
-	std::vector<bool> bit_sequence;
-	dfs(root, bit_sequence, table);
-
-	return table;
-}
-
-std::experimental::optional<char> goDownHuffman(HuffmanNode*& node, int direction) {
+std::experimental::optional<unsigned char> goDownHuffman(HuffmanNode*& node, int direction) {
 	node = node->child[direction];
 	if(node->child[0]) return {};
 	return {node->symbol};
+}
+
+HuffmanNode* makeNode() {
+	return new HuffmanNode();
+}
+HuffmanNode* makeLeftChild(HuffmanNode* const node) {
+	return node->child[0] = makeNode();
+}
+HuffmanNode* makeRightChild(HuffmanNode* const node) {
+	return node->child[1] = makeNode();
+}
+
+void putChar(HuffmanNode* const node, char c) {
+	node->symbol = c;
 }

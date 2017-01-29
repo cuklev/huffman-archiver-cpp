@@ -10,6 +10,9 @@ struct HuffmanNode;
 
 HuffmanNode* buildHuffmanTree(const std::array<uint64_t, BYTES_COUNT>&);
 
-std::array<std::vector<bool>, BYTES_COUNT> buildCompressTable(HuffmanNode*);
+std::experimental::optional<unsigned char> goDownHuffman(HuffmanNode*&, int);
 
-std::experimental::optional<char> goDownHuffman(HuffmanNode*&, int);
+HuffmanNode* makeNode();
+HuffmanNode* makeLeftChild(HuffmanNode* const);
+HuffmanNode* makeRightChild(HuffmanNode* const);
+void putChar(HuffmanNode* const, char);

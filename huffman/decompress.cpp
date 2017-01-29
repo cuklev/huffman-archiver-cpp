@@ -2,22 +2,32 @@
 #include "huffman.hpp"
 #include "../binary/bin_stream.hpp"
 
+void dfs(BinaryRead& bin_in, HuffmanNode* const node) {
+	if(bin_in()) {
+		unsigned char c = 0;
+		for(int i = 7; i >= 0; --i)
+			c |= (uint8_t)bin_in() << i;
+		putChar(node, c);
+	} else {
+		dfs(bin_in, makeLeftChild(node));
+		dfs(bin_in, makeRightChild(node));
+	}
+}
+
 void decompress(std::istreambuf_iterator<char>& in_iterator,
 		std::ostreambuf_iterator<char>& out_iterator) {
 
-	std::array<uint64_t, BYTES_COUNT> freq_table;
+	BinaryRead bin_in(in_iterator);
 
-	{
-		auto dest = (char*)freq_table.data();
-		for(int left = sizeof(freq_table); left > 0; --left) {
-			*dest = *in_iterator;
-			++in_iterator;
-			++dest;
-		}
-	}
+	auto root = makeNode();
+	dfs(bin_in, root);
 
-	int last_not_zero = -1;
 	uint64_t bytes_left = 0;
+	for(int i = 63; i >= 0; --i)
+		bytes_left |= (uint8_t)bin_in() << i;
+
+/*
+	int last_not_zero = -1;
 	for(int i = 0; i < (int)freq_table.size(); ++i) {
 		bytes_left += freq_table[i];
 		if(freq_table[i] == 0) continue;
@@ -33,11 +43,9 @@ void decompress(std::istreambuf_iterator<char>& in_iterator,
 			*out_iterator = last_not_zero;
 		return;
 	}
+*/
 
-	auto root = buildHuffmanTree(freq_table);
 	auto node = root;
-
-	BinaryRead bin_in(in_iterator);
 	while(true) {
 		if(auto result = goDownHuffman(node, bin_in())) {
 			*out_iterator = result.value();

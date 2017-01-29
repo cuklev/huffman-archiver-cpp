@@ -52,8 +52,22 @@ HuffmanNode* buildHuffmanTree(const std::array<uint64_t, BYTES_COUNT>& freq_tabl
 	return q.top().node;
 }
 
-std::experimental::optional<char> goDownHuffman(HuffmanNode*& node, int direction) {
+std::experimental::optional<unsigned char> goDownHuffman(HuffmanNode*& node, int direction) {
 	node = node->child[direction];
 	if(node->child[0]) return {};
 	return {node->symbol};
+}
+
+HuffmanNode* makeNode() {
+	return new HuffmanNode();
+}
+HuffmanNode* makeLeftChild(HuffmanNode* const node) {
+	return node->child[0] = makeNode();
+}
+HuffmanNode* makeRightChild(HuffmanNode* const node) {
+	return node->child[1] = makeNode();
+}
+
+void putChar(HuffmanNode* const node, char c) {
+	node->symbol = c;
 }

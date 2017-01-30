@@ -1,6 +1,3 @@
-#include "huffman/compress.hpp"
-#include "huffman/decompress.hpp"
-
 #include "commands/compress.hpp"
 #include "commands/decompress.hpp"
 #include "commands/archive.hpp"

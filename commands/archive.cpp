@@ -4,11 +4,12 @@
 
 #include<fstream>
 #include<vector>
+#include<experimental/filesystem>
 
 void archive_files(const std::vector<std::string>& filenames, std::ostream& out_stream) {
 	std::ostreambuf_iterator<char> out_iterator(out_stream);
 
-	for(auto& fn : filenames) {
+	for(auto& fn : filenames) { // TODO: must strip base path
 		for(char c : fn) *out_iterator = c;
 		*out_iterator = '\0';
 	}
@@ -31,7 +32,20 @@ void archive(const char* in_file, const char* out_file) {
 }
 
 void archive(const char* in_file, std::ostream& out_stream) {
-	throw "Not implemented";
+	namespace fs = std::experimental::filesystem;
+
+	std::vector<std::string> filenames;
+
+	if(fs::is_regular_file(in_file)) {
+		filenames.push_back(in_file);
+	} else if(fs::is_directory(in_file)) {
+		for(auto& p: fs::recursive_directory_iterator(in_file)) {
+			if(!fs::is_regular_file(p)) continue;
+			filenames.push_back(p.path());
+		}
+	} // else not supported, yet!
+
+	archive_files(filenames, out_stream);
 }
 
 void archive(std::istream& in_stream, std::ostream& out_stream) {

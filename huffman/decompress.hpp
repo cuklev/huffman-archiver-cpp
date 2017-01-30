@@ -1,6 +1,5 @@
 #pragma once
 
-#include "../binary/bin_stream.hpp"
-#include<iterator>
+#include "../binary/binary_read.hpp"
 
 void decompress(BinaryRead&, std::ostreambuf_iterator<char>&);

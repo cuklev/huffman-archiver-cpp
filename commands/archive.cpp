@@ -1,6 +1,5 @@
 #include "archive.hpp"
 #include "../huffman/compress.hpp"
-#include "../binary/bin_stream.hpp"
 
 #include<fstream>
 #include<vector>

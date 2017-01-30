@@ -4,25 +4,27 @@
 
 class BinaryRead {
 	private:
-		std::istreambuf_iterator<char>& it_;
+		std::istreambuf_iterator<char> it_;
 		int index_;
 
 	public:
-		BinaryRead(std::istreambuf_iterator<char>&);
+		BinaryRead(std::istream&);
 		BinaryRead(const BinaryRead&) = delete;
 		bool operator()();
+		char readAlignedByte();
 };
 
 class BinaryWrite {
 	private:
-		std::ostreambuf_iterator<char>& it_;
+		std::ostreambuf_iterator<char> it_;
 		int index_;
 		unsigned char buffer_;
 
 	public:
-		BinaryWrite(std::ostreambuf_iterator<char>&);
+		BinaryWrite(std::ostream&);
 		BinaryWrite(const BinaryWrite&) = delete;
 		void operator()(bool);
+		void writeAlignedByte(char);
 
 		template<typename T>
 		void write(T c) { // TODO: optimize for whole bytes

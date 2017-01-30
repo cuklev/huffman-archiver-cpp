@@ -13,14 +13,13 @@ void extract(const char* in_file, const char* out_dir) {
 }
 
 void extract(std::istream& in_stream, const char* out_dir) {
-	std::istreambuf_iterator<char> in_iterator(in_stream);
+	BinaryRead bin_in(in_stream);
 
 	std::vector<std::string> filenames;
 
 	std::string fn;
 	while(true) {
-		char next = *in_iterator;
-		++in_iterator;
+		char next = bin_in.readAlignedByte();
 		if(next == '\0') {
 			if(fn.empty()) break;
 			filenames.push_back(fn);
@@ -31,7 +30,6 @@ void extract(std::istream& in_stream, const char* out_dir) {
 		}
 	}
 
-	BinaryRead bin_in(in_iterator);
 	for(auto& fn : filenames) {
 		auto full_name = fs::path(out_dir) / fn;
 		fs::create_directories(full_name.parent_path());

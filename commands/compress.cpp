@@ -14,8 +14,7 @@ void compress(const char* in_file, std::ostream& out_stream) {
 	auto freq_table = readTable(in);
 	in.close();
 	in.open(in_file);
-	std::ostreambuf_iterator<char> out_iterator(out_stream);
-	BinaryWrite bin_out(out_iterator);
+	BinaryWrite bin_out(out_stream);
 	compress(freq_table, in, bin_out);
 }
 
@@ -30,8 +29,7 @@ void compress(std::istream& in_stream, std::ostream& out) {
 	}
 	{
 		std::istringstream in_stream(in_data);
-		std::ostreambuf_iterator<char> out_iterator(out);
-		BinaryWrite bin_out(out_iterator);
+		BinaryWrite bin_out(out);
 		compress(freq_table, in_stream, bin_out);
 	}
 }

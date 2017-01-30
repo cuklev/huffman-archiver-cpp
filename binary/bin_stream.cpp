@@ -1,7 +1,7 @@
 #include "bin_stream.hpp"
 
-BinaryRead::BinaryRead(std::istreambuf_iterator<char>& it)
-	: it_(it),
+BinaryRead::BinaryRead(std::istream& in)
+	: it_(in),
 	index_(7) {}
 
 bool BinaryRead::operator()() {
@@ -15,8 +15,14 @@ bool BinaryRead::operator()() {
 	return f;
 }
 
-BinaryWrite::BinaryWrite(std::ostreambuf_iterator<char>& it)
-	: it_(it),
+char BinaryRead::readAlignedByte() {
+	char c = *it_;
+	++it_;
+	return c;
+}
+
+BinaryWrite::BinaryWrite(std::ostream& out)
+	: it_(out),
 	index_(7),
 	buffer_(0) {}
 
@@ -29,6 +35,10 @@ void BinaryWrite::operator()(bool bit) {
 		index_ = 7;
 		buffer_ = 0;
 	}
+}
+
+void BinaryWrite::writeAlignedByte(char c) {
+	*it_ = c;
 }
 
 BinaryWrite::~BinaryWrite() {

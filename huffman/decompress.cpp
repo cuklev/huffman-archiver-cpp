@@ -1,6 +1,5 @@
 #include "decompress.hpp"
 #include "huffman.hpp"
-#include "../binary/bin_stream.hpp"
 
 void dfs(BinaryRead& bin_in, HuffmanNode* const node) {
 	if(bin_in()) {
@@ -14,10 +13,8 @@ void dfs(BinaryRead& bin_in, HuffmanNode* const node) {
 	}
 }
 
-void decompress(std::istreambuf_iterator<char>& in_iterator,
+void decompress(BinaryRead& bin_in,
 		std::ostreambuf_iterator<char>& out_iterator) {
-
-	BinaryRead bin_in(in_iterator);
 
 	uint64_t bytes_left = 0;
 	for(int i = 63; i >= 0; --i)

@@ -1,5 +1,4 @@
 #include "compress.hpp"
-#include "../binary/bin_stream.hpp"
 #include<algorithm>
 
 using uch = unsigned char;
@@ -35,9 +34,7 @@ void dfs(HuffmanNode* const node, std::vector<bool>& bit_sequence, std::array<st
 
 void compress(const std::array<uint64_t, BYTES_COUNT>& freq_table,
 		std::istream& input,
-		std::ostreambuf_iterator<char>& out_iterator) {
-
-	BinaryWrite bin_out(out_iterator);
+		BinaryWrite& bin_out) {
 
 	{
 		uint64_t byte_length = 0;

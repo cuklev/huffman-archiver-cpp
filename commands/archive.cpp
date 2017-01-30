@@ -1,11 +1,13 @@
 #include "archive.hpp"
 #include "../huffman/compress.hpp"
+#include "../binary/bin_stream.hpp"
 
 #include<fstream>
 #include<vector>
 
 void archive_files(const std::vector<std::string>& filenames, std::ostream& out_stream) {
 	std::ostreambuf_iterator<char> out_iterator(out_stream);
+	BinaryWrite bin_out(out_iterator);
 
 	for(auto& fn : filenames) {
 		for(char c : fn) *out_iterator = c;
@@ -18,7 +20,7 @@ void archive_files(const std::vector<std::string>& filenames, std::ostream& out_
 		auto freq_table = readTable(in);
 		in.close();
 		in.open(fn);
-		compress(freq_table, in, out_iterator);
+		compress(freq_table, in, bin_out);
 	}
 }
 

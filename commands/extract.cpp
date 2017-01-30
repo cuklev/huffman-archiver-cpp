@@ -28,10 +28,11 @@ void extract(std::istream& in_stream, const char* out_dir) {
 		}
 	}
 
+	BinaryRead bin_in(in_iterator);
 	for(auto& fn : filenames) {
 		// TODO: ensure directory exists
 		std::ofstream out(out_dir + ("/" + fn));
 		std::ostreambuf_iterator<char> out_iterator(out);
-		decompress(in_iterator, out_iterator);
+		decompress(bin_in, out_iterator);
 	}
 }

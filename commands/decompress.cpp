@@ -17,5 +17,7 @@ void decompress(const char* in_file, std::ostream& out_stream) {
 void decompress(std::istream& in_stream, std::ostream& out_stream) {
 	std::istreambuf_iterator<char> in_iterator(in_stream);
 	std::ostreambuf_iterator<char> out_iterator(out_stream);
-	decompress(in_iterator, out_iterator);
+
+	BinaryRead bin_in(in_iterator);
+	decompress(bin_in, out_iterator);
 }

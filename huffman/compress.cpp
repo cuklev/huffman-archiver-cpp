@@ -16,7 +16,7 @@ std::array<uint64_t, BYTES_COUNT> readTable(std::istream& input) {
 void dfs(HuffmanNode* const node, std::vector<bool>& bit_sequence, std::array<std::vector<bool>, BYTES_COUNT>& table, BinaryWrite& bin_out) {
 	if(auto result = isLeaf(node)) {
 		bin_out(1);
-		bin_out.write(result.value());
+		bin_out.writeUnalignedByte(result.value());
 		table[result.value()] = bit_sequence;
 		return;
 	}
@@ -46,12 +46,12 @@ void compress(const std::array<uint64_t, BYTES_COUNT>& freq_table,
 				else if(non_zero == -1) non_zero = i;
 			}
 		}
-		bin_out.write(byte_length);
+		bin_out.writeUnalignedUInt64(byte_length);
 
 		if(byte_length == 0) return;
 		if(non_zero >= 0) {
 			bin_out(1);
-			bin_out.write((uint8_t)non_zero);
+			bin_out.writeUnalignedByte((uint8_t)non_zero);
 			return;
 		}
 	}

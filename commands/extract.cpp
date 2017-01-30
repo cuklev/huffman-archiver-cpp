@@ -3,6 +3,7 @@
 
 #include<fstream>
 #include<vector>
+#include<experimental/filesystem>
 
 void extract(const char* in_file, const char* out_dir) {
 	std::ifstream in(in_file);
@@ -30,8 +31,11 @@ void extract(std::istream& in_stream, const char* out_dir) {
 
 	BinaryRead bin_in(in_iterator);
 	for(auto& fn : filenames) {
-		// TODO: ensure directory exists
-		std::ofstream out(out_dir + ("/" + fn));
+		std::string full_name = out_dir + ("/" + fn);
+		const auto ind = full_name.find_last_of("/");
+		std::experimental::filesystem::create_directories(full_name.substr(0, ind));
+
+		std::ofstream out(full_name);
 		std::ostreambuf_iterator<char> out_iterator(out);
 		decompress(bin_in, out_iterator);
 	}

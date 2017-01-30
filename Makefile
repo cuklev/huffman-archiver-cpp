@@ -1,6 +1,6 @@
 CXX=g++
 CXXFLAGS=-c -O2 -march=native -pipe -MMD -MP
-LDFLAGS=
+LDFLAGS=-lstdc++fs
 
 BUILD_DIR=bin
 TARGET=${BUILD_DIR}/huff
@@ -15,7 +15,7 @@ clean:
 	rm -rf ${BUILD_DIR}
 
 ${TARGET}: ${O_FILES}
-	${CXX} ${LDFLAGS} $^ -o $@
+	${CXX} $^ -o $@ ${LDFLAGS}
 
 ${BUILD_DIR}/%.cpp.o: %.cpp # | $(@D)
 	@mkdir -p $(@D)

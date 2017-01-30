@@ -10,6 +10,10 @@ class BinaryRead {
 	public:
 		BinaryRead(std::istream&);
 		BinaryRead(const BinaryRead&) = delete;
+
 		bool operator()();
 		char readAlignedByte();
+
+		char readUnalignedByte();
+		uint64_t readUnalignedUInt64();
 };

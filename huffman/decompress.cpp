@@ -3,10 +3,7 @@
 
 void dfs(BinaryRead& bin_in, HuffmanNode* const node) {
 	if(bin_in()) {
-		unsigned char c = 0;
-		for(int i = 7; i >= 0; --i)
-			c |= (uint8_t)bin_in() << i;
-		putChar(node, c);
+		putChar(node, bin_in.readUnalignedByte());
 	} else {
 		dfs(bin_in, makeLeftChild(node));
 		dfs(bin_in, makeRightChild(node));
@@ -16,10 +13,7 @@ void dfs(BinaryRead& bin_in, HuffmanNode* const node) {
 void decompress(BinaryRead& bin_in,
 		std::ostreambuf_iterator<char>& out_iterator) {
 
-	uint64_t bytes_left = 0;
-	for(int i = 63; i >= 0; --i)
-		bytes_left |= (uint8_t)bin_in() << i;
-
+	auto bytes_left = bin_in.readUnalignedUInt64();
 	if(bytes_left == 0) return;
 
 	auto root = makeNode();

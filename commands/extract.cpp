@@ -33,9 +33,8 @@ void extract(std::istream& in_stream, const char* out_dir) {
 
 	BinaryRead bin_in(in_iterator);
 	for(auto& fn : filenames) {
-		std::string full_name = fs::path(out_dir) / fn;
-		const auto ind = full_name.find_last_of("/");
-		fs::create_directories(full_name.substr(0, ind));
+		auto full_name = fs::path(out_dir) / fn;
+		fs::create_directories(full_name.parent_path());
 
 		std::ofstream out(full_name);
 		std::ostreambuf_iterator<char> out_iterator(out);

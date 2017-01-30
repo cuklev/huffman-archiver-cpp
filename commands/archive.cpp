@@ -7,13 +7,14 @@
 
 void archive_files(const std::vector<std::string>& filenames, std::ostream& out_stream) {
 	std::ostreambuf_iterator<char> out_iterator(out_stream);
-	BinaryWrite bin_out(out_iterator);
 
 	for(auto& fn : filenames) {
 		for(char c : fn) *out_iterator = c;
 		*out_iterator = '\0';
 	}
 	*out_iterator = '\0';
+
+	BinaryWrite bin_out(out_iterator);
 
 	for(auto& fn : filenames) {
 		std::ifstream in(fn);

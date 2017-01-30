@@ -9,7 +9,7 @@
 void archive_files(const std::vector<std::string>& filenames, std::ostream& out_stream) {
 	std::ostreambuf_iterator<char> out_iterator(out_stream);
 
-	for(auto& fn : filenames) { // TODO: must strip base path
+	for(auto& fn : filenames) {
 		for(char c : fn) *out_iterator = c;
 		*out_iterator = '\0';
 	}
@@ -36,10 +36,16 @@ void archive(const char* in_file, std::ostream& out_stream) {
 
 	std::vector<std::string> filenames;
 
-	if(fs::is_regular_file(in_file)) {
-		filenames.push_back(in_file);
-	} else if(fs::is_directory(in_file)) {
-		for(auto& p: fs::recursive_directory_iterator(in_file)) {
+	auto parent_path = fs::path(in_file).parent_path();
+	if(!parent_path.empty())
+		fs::current_path(fs::path(in_file).parent_path());
+
+	auto file = fs::path(in_file).filename();
+
+	if(fs::is_regular_file(file)) {
+		filenames.push_back(file);
+	} else if(fs::is_directory(file)) {
+		for(auto& p: fs::recursive_directory_iterator(file)) {
 			if(!fs::is_regular_file(p)) continue;
 			filenames.push_back(p.path());
 		}
